@@ -1,132 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--bootstrap-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!--bootstrap-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-  integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
-  integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
-  integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-  crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
-  integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
-  crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
-    <link rel="stylesheet" href="estilo.css">
-   
-    <script src="knockout-3.5.0.js"></script>
-    <title>Tienda PCSotero</title>
+    integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+    integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+    integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+    integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <link rel="stylesheet" href="estilo.css">
+
+  <script src="knockout-3.5.0.js"></script>
+  <title>Tienda PCSotero</title>
 </head>
 
 <body>
-    
 
-<div class="container">
+
+  <div class="container">
 
     <!--SELECT-->
-<h1>Categoría</h1>
-    
-<select id="categoria"
-    name="categoria"
-    data-bind="options: categorias,
+    <h1>Categoría</h1>
+
+    <select id="categoria" name="categoria" data-bind="options: categorias,
                optionsText: 'categoria',
                optionsValue : 'id',
                value : filtroCatalogo,
                optionsCaption: 'Todas',
                event: { change: filtrarPorCategoria}">
-</select>
+    </select>
 
 
-<h1>Catálogo</h1>
+    <h1>Catálogo</h1>
 
-<div class="row">
-       
-        <div class="col-7">
+    <div class="row">
 
-<table class="table table-hover table-striped ">
-        <thead>
-          <tr>
-            <th scope="col" >Producto</th>
-            <th scope="col">Precio</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
+      <div class="col-7">
+
+        <table class="table table-hover table-striped ">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Precio</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
 
           <tbody data-bind="foreach: catalogo">
-          <tr   >
-             
-            <td  >
-                <b><p data-bind="text: producto, event: { mouseover: $parent.mostrarDetalles, mouseout: $parent.ocultarDetalles }"></p></b>
-              <div data-bind="visible: detalleDeProducto" > 
+            <tr>
+
+              <td>
+                <b>
+                  <p
+                    data-bind="text: producto, event: { mouseover: $parent.mostrarDetalles, mouseout: $parent.ocultarDetalles }">
+                  </p>
+                </b>
+                <div data-bind="visible: detalleDeProducto">
                   <b>Descripción: </b><span data-bind="text: descripcion"></span></br>
-              <b> Unidades:</b>   <span data-bind="text: stock"></span>
-            </div>
-        </td>
-            <td data-bind="css:{oferta:precio_catalogo>precio_pvp }">
+                  <b> Unidades:</b> <span data-bind="text: stock"></span>
+                </div>
+              </td>
+              <td data-bind="css:{oferta:precio_catalogo>precio_pvp }">
                 <span data-bind="text: precio_pvp"></span><span>€</span>
-            </td>
-            <td>
-                <span class="fas fa-shopping-cart"></span>
-            </td>
-           
-          </tr>
-         
-        </tbody>
-      </table>
-   </div>
-   <div class="col-1"></div>
+              </td>
+              <td>
+                <span data-bind="html:boton, click: addCesta"></span>
+                <!-- <button class="fas fa-shopping-cart" data-bind="click: $parent.addCesta"></button> -->
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="col-1"></div>
       <div class="col">
-            
-            <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Tu cesta</th>
-                        <th scope="col">xxx<span>€</span></th>
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
 
-                        <td>Mark</td>
-                        
-                      </tr>
-                      <tr>
-                        <td>Mark</td>
+        <table class="table table-hover cesta">
+          <thead>
+            <tr>
+              <th scope="col">Tu cesta</th>
+              <th scope="col" class="resaltado"><span data-bind="text: totalCesta"></span>€</th>
 
-                        <td>Jacob</td>
-                        
-                      </tr>
-                      <tr>
-                        
-                       <td>Mark</td>
+            </tr>
+          </thead>
+          <tbody data-bind="foreach: cesta">
+            <tr>
+              <td>
+                <p data-bind="text: producto" class="resaltado"></p>
+                <div>
+                  <span data-bind="html: botonMenos,click:restaProducto"></span>
+                  <span data-bind="text: cantidad" class="resaltado"></span>
+                  <span data-bind="html: botonMas,click:comprobarProducto"></span>
+                </div>
+              </td>
+              <td>
+                <p> <span data-bind="text: precio_pvp"></span><span>€</span></p>
+                <div class="resaltado"><span data-bind="text: precioTotal"></span><span>€</span></div>
+              </td>
 
-                        <td>@twitter</td>
-                      </tr>
-                    </tbody>
-                  </table>
-   
-        </div>
-   
-   
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+
     </div>
 
 
 
 
 
-</div>
+  </div>
 
 
-<!--CÓDIGO KNOCKOUT-->
+  <!--CÓDIGO KNOCKOUT-->
 
-<script type="text/javascript" src="scriptko.js"></script>
+  <script type="text/javascript" src="scriptko.js"></script>
 </body>
 
 </html>

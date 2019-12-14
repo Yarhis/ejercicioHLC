@@ -33,6 +33,7 @@ catalogoCompleto: function(){
     
     productos.forEach(element => {
        element.detalleDeProducto = ko.observable(false);
+       element.boton = '<button class="fas fa-shopping-cart"> </button>';
        this.catalogo.push(element);
    });  
 },
@@ -46,6 +47,7 @@ catalogoCompleto: function(){
         producto.detalleDeProducto(false);
     },
 
+    //filtrado por categorias
     filtroCatalogo:ko.observable(),
 
     filtrarPorCategoria : function(){
@@ -54,20 +56,26 @@ catalogoCompleto: function(){
         
         if(self.filtroCatalogo()!=null && self.filtroCatalogo()!=''&& self.filtroCatalogo()!=undefined){
             this.catalogo.remove( 
-                function(item) {             
-                return (item.idcategoria!=self.filtroCatalogo()); 
+                function(producto) {             
+                return (producto.idcategoria!=self.filtroCatalogo()); 
             });
 
            
         }
        
     },
-        // this.catalogo().forEach(element => {
-        //      if(element.idcategoria!=self.filtroCatalogo()){
-        //          self.catalogo.removeAll(element);
-        //     }
-        // }) 
-    // }
+    //cesta
+       totalCesta: ko.observable(0),
+
+       cesta: ko.observableArray([]),
+
+    //    addCesta : function(producto){
+    //     var self = this;
+        
+    //     // this.cesta.push(producto);
+    //    },
+
+
        
      
               
@@ -77,9 +85,93 @@ catalogoCompleto: function(){
 
 };//end of viewmodel
 
-
 ko.applyBindings(viewModel);
 
 //carga inicial
 viewModel.catalogoCompleto();
+
+
+/*
+método que primero comprueba si el producto existe, 
+ -en caso de no existir lo agrega a la cesta
+- a continuación, recalcula el total de la cesta
+ */
+function addCesta(producto){
+
+    if(comprobarProducto(producto)){
+        producto.cantidad = 1;
+        producto.precioTotal = producto.cantidad*producto.precio_pvp;
+        producto.botonMenos ='<button class="fas fa-minus"> </button>';
+        producto.botonMas ='<button class="fas fa-plus"></button>';
+        viewModel.cesta.push(producto);
+    }
+alert(viewModel.cesta().cantidad);
+    calcularTotalCesta();
+   
+}
+/*
+metodo que comprueba si el producto cliqueado es nuevo:
+-si es nuevo, retorna true y otro método manipula la cesta
+- si existe un producto ya la cesta, le suma 1 más
+ */
+function comprobarProducto(producto){
+
+    //comprobamos si el producto es nuevo
+    var productoNuevo= true;
+
+    viewModel.cesta().forEach(element => {
+        
+        if(producto.id==element.id){
+            alert('compara '+element.id+'con '+producto.id);
+            alert('cantidad '+element.cantidad+' stock '+element.stock)
+            productoNuevo=false;
+            //controlamos que la cesta no tenga más pedidos que stock 
+            if(element.cantidad<element.stock){
+                alert('sigo dentro');
+                alert('valor de cesta: '+viewModel.cesta.cantidad)
+                //si existe, le añadimos el producto a la cesta y modificamos su coste
+                viewModel.cesta().cantidad=viewModel.cesta().cantidad+1;
+                viewModel.cesta().precioTotal = viewModel.cesta().cantidad* viewModel.cesta().precio_pvp;
+            }
+           
+        }
+        });
+        return productoNuevo;
+}
+
+/*
+metodo para calcular el total de la cesta. primero deja el valor a 0 
+y la recorre para calcular la suma de todos los valores de la cesta
+*/
+function calcularTotalCesta(){
+
+    viewModel.cesta().totalCesta= 0;
+
+    viewModel.cesta().forEach(element => {
+        viewModel.cesta().totalCesta=viewModel.cesta().totalCesta+element.precioTotal;
+    });
+
+}
+/*
+Método que resta elementos de la cesta. 
+Si es el último elemento, quita este producto de la cesta
+
+*/
+function restaProducto(producto){
+
+    viewModel.cesta().forEach(element => {
+
+        if(producto.id==element.id){
+
+            viewModel.cesta().cantidad=viewModel.cesta().cantidad-1;
+            viewModel.cesta().precioTotal = viewModel.cesta().cantidad* viewModel.cesta().precio_pvp;
+        }
+       
+    });
+
+    if(viewModel.cesta().cantidad<=0){
+        viewModel.cesta.remove(producto);
+    }
+}
+
 
