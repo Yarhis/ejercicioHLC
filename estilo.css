@@ -1,0 +1,22 @@
+*{
+    text-align: justify;
+}
+
+h1{
+   
+ padding: 3% 0% 3% 0%; 
+  
+}
+
+td{
+    max-width: 280px;
+    word-break: break-word;
+}
+
+.oferta{
+    color:red;
+    font-weight: bold;
+
+    font-size: 20px;
+}
+
