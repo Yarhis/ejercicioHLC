@@ -67,9 +67,15 @@ catalogoCompleto: function(){
     //cesta
        totalCesta: ko.observable(0),
 
-       cesta: ko.observableArray(),
+       cesta: ko.observableArray([]),
 
- 
+       //solución provisional para refrescar la cesta cuando se edita el array
+       refresh : function(){
+        var self = this;
+        var data = self.cesta().slice(0);
+        self.cesta([]);
+        self.cesta(data);
+    }
 };//end of viewmodel
 
 
@@ -87,8 +93,12 @@ function addCesta(producto){
         producto.botonMas ='<button class="fas fa-plus"></button>';
         viewModel.cesta.push(producto);
     }
+   
 
     calcularTotalCesta();
+
+    
+    
    
 }
 /*
@@ -112,9 +122,11 @@ function comprobarProducto(producto){
                 productoTemp = producto;
                 productoTemp.cantidad =  productoTemp.cantidad+1;
                 productoTemp.precioTotal = productoTemp.cantidad*productoTemp.precio_pvp;
-
+        
                 viewModel.cesta.replace (producto,productoTemp);
-
+                viewModel.refresh();
+            }else{
+                alert("No se puede añadir más articulos de ese producto, no existe stock suficiente.");
             }
            
         }
@@ -155,7 +167,8 @@ function restaProducto(producto){
             productoTemp = producto;
             productoTemp.cantidad =  productoTemp.cantidad-1;
             productoTemp.precioTotal = productoTemp.cantidad*productoTemp.precio_pvp;
-            viewModel.cesta.replace (producto,productoTemp);
+            viewModel.cesta.replace (producto,productoTemp);  
+            viewModel.refresh();          
         }
        
     });
@@ -163,6 +176,7 @@ function restaProducto(producto){
     if(productoTemp.cantidad<=0){
         viewModel.cesta.remove(producto);
     }
+    calcularTotalCesta();
 }
 
 

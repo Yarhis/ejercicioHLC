@@ -96,7 +96,7 @@
 
             </tr>
           </thead>
-          <tbody data-bind="foreach: cesta()">
+          <tbody data-bind="foreach: cesta">
             <tr>
               <td>
                 <p data-bind="text: producto" class="resaltado"></p>
@@ -104,6 +104,7 @@
                   <span data-bind="html: botonMenos,click:restaProducto"></span>
                   <span data-bind="text: cantidad" class="resaltado"></span>
                   <span data-bind="html: botonMas,click:comprobarProducto"></span>
+               
                 </div>
               </td>
               <td>
