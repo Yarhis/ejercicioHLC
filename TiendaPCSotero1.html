@@ -74,6 +74,8 @@
                 <span data-bind="text: precio_pvp"></span><span>€</span>
               </td>
               <td>
+                <!-- <span data-bind="html:boton, click: addCesta"></span> -->
+
                 <span data-bind="html:boton, click: addCesta"></span>
                 <!-- <button class="fas fa-shopping-cart" data-bind="click: $parent.addCesta"></button> -->
               </td>
@@ -94,7 +96,7 @@
 
             </tr>
           </thead>
-          <tbody data-bind="foreach: cesta">
+          <tbody data-bind="foreach: cesta()">
             <tr>
               <td>
                 <p data-bind="text: producto" class="resaltado"></p>

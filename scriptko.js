@@ -67,28 +67,10 @@ catalogoCompleto: function(){
     //cesta
        totalCesta: ko.observable(0),
 
-       cesta: ko.observableArray([]),
+       cesta: ko.observableArray(),
 
-    //    addCesta : function(producto){
-    //     var self = this;
-        
-    //     // this.cesta.push(producto);
-    //    },
-
-
-       
-     
-              
-   
-
-    
-
+ 
 };//end of viewmodel
-
-ko.applyBindings(viewModel);
-
-//carga inicial
-viewModel.catalogoCompleto();
 
 
 /*
@@ -105,7 +87,7 @@ function addCesta(producto){
         producto.botonMas ='<button class="fas fa-plus"></button>';
         viewModel.cesta.push(producto);
     }
-alert(viewModel.cesta().cantidad);
+
     calcularTotalCesta();
    
 }
@@ -122,20 +104,22 @@ function comprobarProducto(producto){
     viewModel.cesta().forEach(element => {
         
         if(producto.id==element.id){
-            alert('compara '+element.id+'con '+producto.id);
-            alert('cantidad '+element.cantidad+' stock '+element.stock)
             productoNuevo=false;
             //controlamos que la cesta no tenga más pedidos que stock 
             if(element.cantidad<element.stock){
-                alert('sigo dentro');
-                alert('valor de cesta: '+viewModel.cesta.cantidad)
                 //si existe, le añadimos el producto a la cesta y modificamos su coste
-                viewModel.cesta().cantidad=viewModel.cesta().cantidad+1;
-                viewModel.cesta().precioTotal = viewModel.cesta().cantidad* viewModel.cesta().precio_pvp;
+                productoTemp = {};
+                productoTemp = producto;
+                productoTemp.cantidad =  productoTemp.cantidad+1;
+                productoTemp.precioTotal = productoTemp.cantidad*productoTemp.precio_pvp;
+
+                viewModel.cesta.replace (producto,productoTemp);
+
             }
            
         }
         });
+
         return productoNuevo;
 }
 
@@ -145,13 +129,18 @@ y la recorre para calcular la suma de todos los valores de la cesta
 */
 function calcularTotalCesta(){
 
-    viewModel.cesta().totalCesta= 0;
+    viewModel.totalCesta(0);
 
     viewModel.cesta().forEach(element => {
-        viewModel.cesta().totalCesta=viewModel.cesta().totalCesta+element.precioTotal;
+        viewModel.totalCesta(viewModel.totalCesta()+element.precioTotal);
     });
 
 }
+
+
+
+
+
 /*
 Método que resta elementos de la cesta. 
 Si es el último elemento, quita este producto de la cesta
@@ -162,16 +151,27 @@ function restaProducto(producto){
     viewModel.cesta().forEach(element => {
 
         if(producto.id==element.id){
-
-            viewModel.cesta().cantidad=viewModel.cesta().cantidad-1;
-            viewModel.cesta().precioTotal = viewModel.cesta().cantidad* viewModel.cesta().precio_pvp;
+            productoTemp = {};
+            productoTemp = producto;
+            productoTemp.cantidad =  productoTemp.cantidad-1;
+            productoTemp.precioTotal = productoTemp.cantidad*productoTemp.precio_pvp;
+            viewModel.cesta.replace (producto,productoTemp);
         }
        
     });
 
-    if(viewModel.cesta().cantidad<=0){
+    if(productoTemp.cantidad<=0){
         viewModel.cesta.remove(producto);
     }
 }
+
+
+
+ko.options.deferUpdates = true;
+
+ko.applyBindings(viewModel);
+
+//carga inicial
+viewModel.catalogoCompleto();
 
 
